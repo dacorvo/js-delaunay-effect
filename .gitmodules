@@ -1,0 +1,9 @@
+[submodule "dat-gui"]
+	path = dat-gui
+	url = https://code.google.com/p/dat-gui/
+[submodule "jsfeat"]
+	path = jsfeat
+	url = git://github.com/inspirit/jsfeat.git
+[submodule "delaunay"]
+	path = delaunay
+	url = git://github.com/ironwallaby/delaunay.git
