@@ -3,6 +3,8 @@ js-delaunay-effect
 
 Delaunay Triangulation applied on WebCam stream
 
+[Live Demo](http://kaizouman.github.io/js-delaunay-effect/)
+
 Credits
 =======
 
