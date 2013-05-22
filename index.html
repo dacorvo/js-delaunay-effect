@@ -22,6 +22,7 @@
         <script type="text/javascript" src="jsfeat/build/jsfeat-min.js"></script>
         <script type="text/javascript" src="dat-gui/build/dat.gui.min.js"></script>
         <script type="text/javascript" src="delaunay/delaunay.js"></script>
+        <script type="text/javascript" src="prefixfree/prefixfree.js"></script>
         <script type="text/javascript" src="js/compatibility.js"></script>
         <script type="text/javascript" src="js/profiler.js"></script>
         <script type="text/javascript">
@@ -77,8 +78,9 @@
                     var cheight = Math.floor(480*resolution);
                     img_u8 = new jsfeat.matrix_t(cwidth, cheight, jsfeat.U8_t | jsfeat.C1_t);
                     canvas.width = cwidth;
-                    canvas.height = cheight;                    
-                    canvas.style['webkitTransform']='scale('+1/resolution+')';
+                    canvas.height = cheight;
+                    var style = 'visibility: hidden;transform:scale('+1/resolution+')';                   
+                    canvas['style'] = PrefixFree.prefixCSS(style);
                     gridCtx.setTransform(1/resolution,0,0,1/resolution,0,0);
                     corners = [];
                     var i = cwidth*cheight;
@@ -146,22 +148,22 @@
                     var triangles = triangulate(vertices);
                     stat.stop("triangles");
 
-                    var getTriangleColor = function (img,triangle) {
-                        var getColor = function (point) {
-                            var offset = (point.x+point.y*cwidth)*4;
-                            return {    r:img.data[offset],
-                                        g:img.data[offset+1],
-                                        b:img.data[offset+2]  };
-                        }
-                        var midPoint = function (point1,point2) {
-                            return {x:(point1.x+point2.x)/2,
-                                    y:(point1.y+point2.y)/2};
-                        }
-                        // Pick a point inside the triangle
-                        var point1 = midPoint(triangle.a,triangle.b);
-                        var point = midPoint(point1,triangle.c);
-                        return getColor({x:Math.floor(point.x),y:Math.floor(point.y)});
-                    }
+	var getTriangleColor = function (img,triangle) {
+		var getColor = function (point) {
+			var offset = (point.x+point.y*cwidth)*4;
+			return {    r:img.data[offset],
+						g:img.data[offset+1],
+						b:img.data[offset+2]  };
+		}
+		var midPoint = function (point1,point2) {
+			return {x:(point1.x+point2.x)/2,
+					y:(point1.y+point2.y)/2};
+		}
+		// Pick a point inside the triangle
+		var point1 = midPoint(triangle.a,triangle.b);
+		var point = midPoint(point1,triangle.c);
+		return getColor({x:Math.floor(point.x),y:Math.floor(point.y)});
+	}
                     stat.start("rendering");
                     for(var i=0;i<triangles.length;i++) {
                         var color = triangles[i].color = getTriangleColor(imageData,triangles[i]);

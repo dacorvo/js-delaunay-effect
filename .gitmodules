@@ -7,3 +7,6 @@
 [submodule "delaunay"]
 	path = delaunay
 	url = git://github.com/ironwallaby/delaunay.git
+[submodule "prefixfree"]
+	path = prefixfree
+	url = https://github.com/LeaVerou/prefixfree.git
