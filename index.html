@@ -47,13 +47,9 @@
                             compatibility.requestAnimationFrame(tick);
                         }, 500);
                 }, function (error) {
-                    webcam.hide();
-                    grid.hide();
                     log.innerHTML = '<h4>Unable to get access to your WebCam.</h4>';
                 });
             } catch (error) {
-                webcam.hide();
-                grid.hide();
                 log.innerHTML = '<h4>Fatal Error.</h4>';
             }
             
