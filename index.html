@@ -43,7 +43,7 @@
                     setTimeout(function() {
                             video.play();
                             demo_app();
-                        
+
                             compatibility.requestAnimationFrame(tick);
                         }, 500);
                 }, function (error) {
@@ -52,7 +52,7 @@
             } catch (error) {
                 log.innerHTML = '<h4>Fatal Error.</h4>';
             }
-            
+
             var stat = new profiler();
 
             var gui,options,ctx,gridCtx;
@@ -62,6 +62,7 @@
                 this.threshold = 5;
                 this.resolution = 0.5;
                 this.draw_borders = false;
+                this.wireframe = false;
             }
 
             function demo_app() {
@@ -75,7 +76,7 @@
                     img_u8 = new jsfeat.matrix_t(cwidth, cheight, jsfeat.U8_t | jsfeat.C1_t);
                     canvas.width = cwidth;
                     canvas.height = cheight;
-                    var style = 'visibility: hidden;transform:scale('+1/resolution+')';                   
+                    var style = 'visibility: hidden;transform:scale('+1/resolution+')';
                     canvas['style'] = PrefixFree.prefixCSS(style);
                     gridCtx.setTransform(1/resolution,0,0,1/resolution,0,0);
                     corners = [];
@@ -90,13 +91,14 @@
                     setResolution(value);
                 });
                 gui.add(options, 'draw_borders');
+                gui.add(options, 'wireframe');
 
                 stat.add("capture");
                 stat.add("grayscale");
                 stat.add("fast corners");
                 stat.add("triangles");
                 stat.add("rendering");
-                
+
                 ctx = canvas.getContext('2d');
                 gridCtx = grid.getContext('2d');
 
@@ -105,7 +107,7 @@
                 jsfeat.fast_corners.set_threshold(options.threshold);
 
             }
-                        
+
             function tick() {
                 compatibility.requestAnimationFrame(tick);
                 stat.new_frame();
@@ -126,7 +128,7 @@
                         jsfeat.imgproc.equalize_histogram(img_u8, img_u8);
                         stat.stop("equalize histogram");
                     }
-                    
+
                     if(threshold != options.threshold) {
                         threshold = options.threshold|0;
                         jsfeat.fast_corners.set_threshold(threshold);
@@ -162,7 +164,10 @@
 	}
                     stat.start("rendering");
                     for(var i=0;i<triangles.length;i++) {
-                        var color = triangles[i].color = getTriangleColor(imageData,triangles[i]);
+                        if(options.wireframe)
+                          var color = { r:255, g:255, b:255};
+                        else
+                          var color = triangles[i].color = getTriangleColor(imageData,triangles[i]);
                         gridCtx.fillStyle = 'rgb('+
                             color.r+','+
                             color.g+','+
@@ -172,7 +177,7 @@
                         gridCtx.lineTo(triangles[i].b.x,triangles[i].b.y);
                         gridCtx.lineTo(triangles[i].c.x,triangles[i].c.y);
                         gridCtx.closePath();
-                        if(options.draw_borders) {
+                        if(options.draw_borders  || options.wireframe) {
                             gridCtx.strokeStyle = 'black';
                             gridCtx.stroke();
                         }
@@ -183,7 +188,7 @@
                     log.innerHTML = stat.log();
                 }
             }
-            
+
         },false);
     </script>
     </body>
