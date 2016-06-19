@@ -1,6 +1,6 @@
 [submodule "dat-gui"]
 	path = dat-gui
-	url = https://code.google.com/p/dat-gui/
+	url = git@github.com:dataarts/dat.gui.git
 [submodule "jsfeat"]
 	path = jsfeat
 	url = git://github.com/inspirit/jsfeat.git
